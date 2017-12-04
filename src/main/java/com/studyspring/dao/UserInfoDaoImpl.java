@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import com.studyspring.vo.UserInfoDeleteRequestVO;
 import com.studyspring.vo.UserInfoEnrollRequestVO;
 import com.studyspring.vo.UserInfoVO;
 
@@ -68,5 +69,16 @@ public class UserInfoDaoImpl implements UserInfoDao{
 		listuser.add(user_three);
 		
 		return listuser;
+	}
+
+	@Override
+	public int deleteUserInfoDao(UserInfoDeleteRequestVO userInfoDeleteRequestVO) {
+		System.out.println("delete user: " + userInfoDeleteRequestVO.getUserName());
+		
+		//DB작업//
+		
+		
+		
+		return 1;
 	}
 }

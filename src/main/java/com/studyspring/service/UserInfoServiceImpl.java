@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.studyspring.dao.UserInfoDao;
+import com.studyspring.vo.UserInfoDeleteRequestVO;
 import com.studyspring.vo.UserInfoEnrollRequestVO;
 import com.studyspring.vo.UserInfoVO;
 
@@ -28,5 +29,10 @@ public class UserInfoServiceImpl implements UserInfoService{
 	@Override
 	public List<UserInfoVO> getUserInfoListService() {
 		return userInfoDao.getUserInfoListDao();
+	}
+
+	@Override
+	public int deleteUserInfoService(UserInfoDeleteRequestVO userInfoDeleteRequestVO) {
+		return userInfoDao.deleteUserInfoDao(userInfoDeleteRequestVO);
 	}
 }

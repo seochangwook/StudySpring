@@ -14,6 +14,8 @@
 	<!-- Zebra-Dialog CDN -->
 	<script src="resources/js/dialog/zebra_dialog.src.js"></script>
 	<link rel="stylesheet" href="resources/css/dialog/zebra_dialog.css" type="text/css"/>
+	<!-- ProgressBar -->
+	<link rel="stylesheet" href="resources/css/progressbar/progressbarcss.css" type="text/css"/>
 </head>
 <body>
 	<div>
@@ -65,8 +67,8 @@
 		</c:if>
 	</div>
 	<br>
-	<div id="study6">
-		<p><strong style="color:Blue; font-size: 20px">6. JSTL, Table tag</strong></p>
+	<div id="study6_study9">
+		<p><strong style="color:Blue; font-size: 20px">6. JSTL, Table tag / 9. Zebra_Dialog, Ajax</strong></p>
 		<table border="1">
 		<!-- HTML에서 프로그래밍 적용 : JSTL -->
 		<c:set var='userlist' value='${listuser}'/>
@@ -77,7 +79,7 @@
 					<th>이름</th>
 					<th>나이</th>
 					<th>이미지</th>
-					<th>수정</th>
+					<th>조회</th>
 					<th>삭제</th>
 				</tr>
 			</thead>
@@ -89,7 +91,7 @@
 	                    <td><c:out value='${user.userName}'/></td>
 	                    <td><c:out value='${user.userAge}'/></td>
 	                    <td><img src="./resources/images/${user.userImage}" width="100" height="100"></td>
-	                    <td><button data-pid='${user.userName}'>수정</button></td>
+	                    <td><button data-pid='${user.userName}'>조회</button></td>
 	                    <td><button data-pid2='${user.userName}'>삭제</button></td>
 	                </tr>
 	        		</c:forEach>
@@ -99,6 +101,9 @@
         		<p id='info_sub1' style='font-size:14px;color:#586069; margin:0px'><b>등록된 사용자가 없습니다.</b></p>
         </c:if>
 	</table>
+	<div id="study9">
+	
+	</div>
 	</div>
 	<br>
 	<div id="study7">
@@ -121,27 +126,201 @@
 			<p><button type='submit'>페이지 이동</button></p>
 		</form>
 	</div>
+	<br>
+	<div id="study10">
+		<p><strong style="color:Blue; font-size: 20px">10. File Upload</strong></p>
+		<div id="filetransdiv">
+			<form>
+				<label>* 주제:</label>&nbsp<input type="text" id="subject" placeholder="input subject"><br>
+				<label>* 내용:</label>&nbsp<textarea class="form-control" rows="5" id="content" placeholder="input content"></textarea><br>
+				<label>* 첨부파일 :</label>&nbsp<input type="file" class="btn btn-default form-join" id="uploadfile" multiple="multiple"/><br>
+			</form>
+			<div id="filelist">
+			</div>
+			<button type="button" class="btn btn-primary" id="btn-enroll">등록</button>
+		</div>
+	</div>
+	<div class="wrap-loading display-none">
+    		<div><img src="resources/images/ajaxprogress/ajax-loader.gif" /></div>
+	</div> 
 </body>
 <script type="text/javascript">
 $(function(){
-	/*$("[data-pid]").on("click", function(){    
+	$("[data-pid]").on("click", function(){    
 		var selUserName = $(this).data("pid");
 		
-		console.log('click modify name: ' + selUserName);
+		//수정 선택관련 다이얼로그//
+		var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>['+selUserName+'] 정보를 조회하시겠습니까?</p>',{
+			title: 'Blog Test Dialog',
+			type: 'question',
+			print: false,
+			width: 760,
+			position: ['right - 20', 'top + 20'],
+			buttons: ['취소', '조회'],
+			onClose: function(caption){
+				if(caption == '조회'){
+					var trans_objeect = 
+			    		{
+			        		'name': selUserName
+				    }
+					var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
+					
+					//ajax call//
+					$.ajax({
+						url: "http://localhost:8080/controller/searchuser",
+						type: 'POST',
+						dataType: 'json',
+						data: trans_json,
+						contentType: 'application/json',
+						mimeType: 'application/json',
+						beforeSend:function(){
+			            		$('.wrap-loading').removeClass('display-none');
+			            	},
+			            	complete:function(){
+			            		$('.wrap-loading').addClass('display-none');
+			            	},
+						success: function(retVal){
+							alert("success ajax..." + '/' + retVal.val + '/' + retVal.info);
+							
+							//페이지에 나타내기 위한 스크립트 코드//
+							var script = '<p>search name is: '+retVal.info+'</p>'
+							
+							$('#study9').empty(); //기존 스크립트 초기화//
+							$('#study9').append(script);
+						},
+						error: function(retVal, status, er){
+							alert("error: "+retVal+" status: "+status+" er:"+er);
+						}
+					});
+				} else if(caption == '취소'){
+					console.log('update cancel');
+				}
+			}
+		});
 	});
 	
 	$("[data-pid2]").on("click", function(){    
 		var selUserName = $(this).data("pid2");
 		
-		console.log('click delete name: ' + selUserName);
-	});*/
+		//수정 선택관련 다이얼로그//
+		var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>['+selUserName+'] 정보를 삭제하시겠습니까?</p>',{
+			title: 'Blog Test Dialog',
+			type: 'warning',
+			print: false,
+			width: 760,
+			position: ['right - 20', 'top + 20'],
+			buttons: ['취소', '삭제'],
+			onClose: function(caption){
+				if(caption == '삭제'){
+					var trans_objeect = 
+			    		{
+			        		'userName': selUserName
+				    }
+					var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
+					
+					//ajax call//
+					$.ajax({
+						url: "http://localhost:8080/controller/deleteuser",
+						type: 'POST',
+						dataType: 'json',
+						data: trans_json,
+						contentType: 'application/json',
+						mimeType: 'application/json',
+						beforeSend:function(){
+			            		$('.wrap-loading').removeClass('display-none');
+			            	},
+			            	complete:function(){
+			            		$('.wrap-loading').addClass('display-none');
+			            	},
+						success: function(retVal){
+							alert("success ajax..." + '/' + retVal.val + '/' + retVal.deleteval);
+						},
+						error: function(retVal, status, er){
+							alert("error: "+retVal+" status: "+status+" er:"+er);
+						}
+					});
+				} else if(caption == '취소'){
+					console.log('delete cancel');
+				}
+			}
+		});
+	});
 	
-	/*var value1 = Number($('#value1').val());
+	var value1 = Number($('#value1').val());
 	var value2 = Number($('#value2').val());
 	
-	var result = value1 + value2;*/
+	var result = value1 + value2;
 	
 	console.log(value1 + '+' + value2 + '=' + (value1 + value2));
+	
+	var files = []; //파일이 저장될 배열//
+	var filecount = 0;
+	$('[data-toggle="tooltip"]').tooltip(); 
+	//파일선택 시 발생하는 이벤트 처리(전송할 파일 목록에 등록)//
+	$('#uploadfile').change(function(event){
+		files[filecount]=event.target.files[0];
+		
+		var printHTML = "<label>첨부파일("+(filecount+1)+") " + event.target.files[0].name + "</label><br>";
+		
+		$('#filelist').append(printHTML);
+		
+		filecount++;
+	});
+	$('#btn-enroll').click(function(){
+		var subjecttext = $('#subject').val();
+		var contenttext = $('#content').val();
+		var arraycount = files.length;
+		
+		//파일전송을 위한 FormData설정//
+		var formData = new FormData();
+		
+		formData.append("subject", subjecttext);
+		formData.append("content", contenttext);
+		
+		for(var i=0; i<arraycount; i++){
+			formData.append("uploadfile["+i+"]", files[i]);
+		}
+		
+		if(arraycount == 0){
+			//수정 선택관련 다이얼로그//
+			var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>현재 선택된 파일이 없습니다.</p>',{
+				title: 'Blog Test Dialog',
+				type: 'warning',
+				print: false,
+				width: 760,
+				position: ['right - 20', 'top + 20'],
+				buttons: ['닫기'],
+				onClose: function(caption){
+	
+				}
+			});
+		} else{
+			//ajax call//
+			$.ajax({
+				type : 'POST',
+	    			url : 'http://localhost:8080/controller/enrollajax',
+	    			data : formData,
+	    			//파일 전송 시 processData, contentType을 null로 설정//
+	   		 	processData : false,
+	    			contentType : false,
+		    		beforeSend:function(){
+		                $('.wrap-loading').removeClass('display-none');
+		            },
+		            complete:function(){
+		                $('.wrap-loading').addClass('display-none');
+		            },
+		    		success : function(retVal) {
+		    			alert('enroll success...');
+		    			
+		    			$('#filelist').empty();
+		    			filecount=0;
+		    		},
+		    		error : function(retVal, status, er) {
+		    			alert("error: "+retVal+" status: "+status+" er:"+er);
+		    		}
+			});	
+		}
+	});		
 });
 </script>
 </html>

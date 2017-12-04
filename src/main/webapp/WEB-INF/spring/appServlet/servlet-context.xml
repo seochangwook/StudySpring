@@ -23,6 +23,11 @@
 	
 	<context:component-scan base-package="com.studyspring.controller" />
 	
+	<!-- MultipartFile -->
+	<beans:bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver">
+		<beans:property name="defaultEncoding" value="UTF-8" /> <!-- 인코딩-->
+	</beans:bean>
+	
 	<!-- Service -->
 	<beans:bean id="UserInfoService" class="com.studyspring.service.UserInfoServiceImpl"/>
 	
