@@ -35,4 +35,19 @@ public class UserInfoServiceImpl implements UserInfoService{
 	public int deleteUserInfoService(UserInfoDeleteRequestVO userInfoDeleteRequestVO) {
 		return userInfoDao.deleteUserInfoDao(userInfoDeleteRequestVO);
 	}
+
+	@Override
+	public List<Map<String, Object>> searchUserInfoDBService(Map<String, Object> params) {
+		return userInfoDao.searchUserInfoDBDao(params);
+	}
+
+	@Override
+	public int updateUserInfoDBService(Map<String, Object> params) {
+		return userInfoDao.updateUserInfoDBDao(params);
+	}
+
+	@Override
+	public int deleteUserInfoDBService(Map<String, Object> params) {
+		return userInfoDao.deleteUserInfoDBDao(params);
+	}
 }

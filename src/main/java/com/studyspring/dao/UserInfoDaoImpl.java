@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.studyspring.vo.UserInfoDeleteRequestVO;
@@ -12,6 +14,9 @@ import com.studyspring.vo.UserInfoVO;
 
 @Repository
 public class UserInfoDaoImpl implements UserInfoDao{
+	@Autowired
+    private SqlSessionTemplate sqlSession;
+	
 	@Override
 	public String searchNameDao(Map<String, Object> info) {
 		System.out.println("user dao call (search name: " + info.get("name").toString());
@@ -80,5 +85,20 @@ public class UserInfoDaoImpl implements UserInfoDao{
 		
 		
 		return 1;
+	}
+
+	@Override
+	public List<Map<String, Object>> searchUserInfoDBDao(Map<String, Object> params) {
+		return sqlSession.selectList("usermanager.searchuser", params);
+	}
+
+	@Override
+	public int updateUserInfoDBDao(Map<String, Object> params) {
+		return sqlSession.update("usermanager.updateuser", params);
+	}
+
+	@Override
+	public int deleteUserInfoDBDao(Map<String, Object> params) {
+		return sqlSession.delete("usermanager.deleteuser", params);
 	}
 }

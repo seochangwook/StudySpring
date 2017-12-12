@@ -12,4 +12,7 @@ public interface UserInfoService {
 	public int enrollUserInfoService(UserInfoEnrollRequestVO userInfoEnrollRequestVO);
 	public List<UserInfoVO> getUserInfoListService();
 	public int deleteUserInfoService(UserInfoDeleteRequestVO userInfoDeleteRequestVO);
+	public List<Map<String, Object>> searchUserInfoDBService(Map<String, Object> params);
+	public int updateUserInfoDBService(Map<String, Object> params);
+	public int deleteUserInfoDBService(Map<String, Object> params);
 }

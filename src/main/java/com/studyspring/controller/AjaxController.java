@@ -100,4 +100,38 @@ public class AjaxController {
 		
 		return retVal;
 	}
+	
+	//Study 11//
+	@RequestMapping(value = "/searchuserdb", method = RequestMethod.POST, produces = {"application/json"})
+	public @ResponseBody Map<String, Object> searchUserDB(@RequestBody Map<String, Object> params) { 
+		Map<String, Object> retVal = new HashMap<String, Object>();
+			
+		System.out.println("ajax call: " + params.get("searchName") + "," + params.get("searchAge") + "," + params.get("searchNo"));
+		
+		retVal.put("val", userInfoService.searchUserInfoDBService(params));
+				
+		return retVal;
+	}
+	
+	@RequestMapping(value = "/updateuserdb", method = RequestMethod.POST, produces = {"application/json"})
+	public @ResponseBody Map<String, Object> updateUserDB(@RequestBody Map<String, Object> params) { 
+		Map<String, Object> retVal = new HashMap<String, Object>();
+			
+		System.out.println("ajax call: " + params.get("updateName") + "," + params.get("updateAge"));
+		
+		retVal.put("resultCode", userInfoService.updateUserInfoDBService(params));
+				
+		return retVal;
+	}
+	
+	@RequestMapping(value = "/deleteuserdb", method = RequestMethod.POST, produces = {"application/json"})
+	public @ResponseBody Map<String, Object> udeleteUserDB(@RequestBody Map<String, Object> params) { 
+		Map<String, Object> retVal = new HashMap<String, Object>();
+			
+		System.out.println("ajax call: " + params.get("deleteName"));
+		
+		retVal.put("resultCode", userInfoService.deleteUserInfoDBService(params));
+				
+		return retVal;
+	}
 }

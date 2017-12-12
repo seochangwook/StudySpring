@@ -54,11 +54,11 @@ public class MainController {
 		userInfoEnrollRequestVO.setUserAge(26);
 		userInfoEnrollRequestVO.setUserImage("sampleimage1.png");
 		
-		if(userInfoService.enrollUserInfoService(userInfoEnrollRequestVO) == 1) {	
+		/*if(userInfoService.enrollUserInfoService(userInfoEnrollRequestVO) == 1) {	
 			result.put("flag", "success");
 		} else {
 			result.put("flag", "fail");
-		}
+		}*/
 		
 		mv.addObject("result", result);
 		

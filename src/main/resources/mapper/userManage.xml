@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="usermanager">
+	<select id="searchuser" parameterType="map" resultType="map">
+		SELECT  USER_NO, USER_NAME, USER_AGE, USER_IMAGE, USER_ROLE
+		FROM    USERINFO
+		WHERE 	1=1
+		<if test="searchName != ''">
+			AND USER_NAME = #{searchName}
+		</if>
+		<if test="searchAge != ''">
+			AND USER_AGE = #{searchAge}
+		</if>
+		<if test="searchNo != ''">
+			AND USER_NO = #{searchNo}
+		</if>
+	</select>
+	<update id="updateuser" parameterType="map" >
+		UPDATE	USERINFO
+		SET		USERINFO.USER_AGE = #{updateAge}
+		WHERE	USERINFO.USER_NAME = #{updateName}
+	</update>
+	<delete id="deleteuser" parameterType="map">
+		DELETE
+		FROM		USERINFO
+		WHERE	USERINFO.USER_NAME = #{deleteName}
+	</delete>
+</mapper>

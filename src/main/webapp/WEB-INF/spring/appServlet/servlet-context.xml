@@ -23,6 +23,25 @@
 	
 	<context:component-scan base-package="com.studyspring.controller" />
 	
+	<!-- DataSource -->
+	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"> 
+	 	<beans:property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+	 	<beans:property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl12c" /> 
+	 	<beans:property name="username" value="system" /> 
+	 	<beans:property name="password" value="oracle"/> 
+	</beans:bean>
+	 
+	<!-- SQL Session -->
+	<beans:bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"> 
+	 	<!-- 쿼리 정보 파일 경로 -->
+	 	<beans:property name="mapperLocations" value="classpath*:mapper/**/*.xml"/>
+	 	<beans:property name="dataSource" ref="dataSource" /> 
+	</beans:bean> 
+	 
+	<beans:bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate"> 
+	 	<beans:constructor-arg index="0" ref="sqlSessionFactory" /> 
+	</beans:bean>
+	
 	<!-- MultipartFile -->
 	<beans:bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver">
 		<beans:property name="defaultEncoding" value="UTF-8" /> <!-- 인코딩-->
